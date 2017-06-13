@@ -2,6 +2,7 @@
 export const actions = {
   addUser ({commit}, newUser) {
     // pass our value args into our addUser 'mutation' method
+    console.log(newUser)
     commit('addUser', newUser)
   }
 }
