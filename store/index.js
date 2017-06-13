@@ -1,4 +1,18 @@
-//  declare a mock initial state for our app
+// outline our actions and mutations
+export const actions = {
+  addUser ({commit}, newUser) {
+    // pass our value args into our addUser 'mutation' method
+    commit('addUser', newUser)
+  }
+}
+
+export const mutations = {
+  addUser (state, newUser) {
+    state.users = [...state.users, newUser]
+  }
+}
+
+// declare a mock initial state for our app
 export const state = () => {
   return {
     roles: [
