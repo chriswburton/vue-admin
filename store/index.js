@@ -1,15 +1,23 @@
 // outline our actions and mutations
 export const actions = {
   addUser ({commit}, newUser) {
+    // generate a psuedo-random 'id' for our newUser
+    newUser.id = Math.floor(Math.random() * 1000) + 1  
     // pass our value args into our addUser 'mutation' method
-    console.log(newUser)
     commit('addUser', newUser)
+  },
+  deleteUser ({commit}, targetUserId) {
+    // TEMP - we'll come back and implement an API dispatch here shortly
+    commit('deleteUser', targetUserId)
   }
 }
 
 export const mutations = {
   addUser (state, newUser) {
     state.users = [...state.users, newUser]
+  },
+  deleteUser (state, targetUserId) {
+    state.users = state.users.filter(user => user.id !== targetUserId)
   }
 }
 

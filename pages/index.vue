@@ -7,7 +7,8 @@
         <th>Employee Name</th>
         <th>Employee Role(s)</th>
         <th>This user manages:</th>
-        <th>Is this user an admin?</th>      
+        <th>Is this user an admin?</th>
+        <th>Actions</th>      
       </thead>
       <tbody>
         <tr v-for="user in users" v-show="user.firstname.toLowerCase().includes(search.toLowerCase()) || user.lastname.toLowerCase().includes(search.toLowerCase())">
@@ -21,11 +22,14 @@
             <template v-else>This user does not manage any staff</template>
           </td>   
           <td>{{user.permissions.admin ? 'Yes' : 'No'}}</td> 
+          <td>
+            <button role="button" @click="deleteUser(user.id)">Delete <img src="https:icon.now.sh/trash" alt="Delete this user?" /></button>
+          </td>
         </tr>
       </tbody>
     </table>
     <h2>Add a new team member</h2>
-    <form @submit.prevent="addUser({firstname, lastname, roleIds, managerOf}); resetFields()">
+    <form @submit.prevent="addUser({firstname, lastname, roleIds, managerOf, permissions: {admin: isAdmin}}); resetFields()">
       <input type="text" placeholder="Enter their firstname" v-model="firstname" v-bind:class="{invalid: firstname.length===0}">
       <input type="text" placeholder="Enter their lastname" v-model="lastname" v-bind:class="{invalid: lastname.length===0}">
       <select name="roles" v-model="roleIds" multiple>
@@ -34,7 +38,7 @@
       <select name="managers" v-model="managerOf" multiple>
         <option v-for="user in users" v-bind:value="user.id">{{user.firstname}} {{user.lastname}}</option>
       </select>
-      <input id="admin-status" type="checkbox" v-bind:checked="isAdmin"> <label for="admin-status">Is this user an admin?</label>
+      <input id="admin-status" type="checkbox" v-bind:checked="isAdmin" v-model="isAdmin"> <label for="admin-status">Is this user an admin?</label>
       <button role="button" v-bind:disabled="firstname.length===0 || lastname.length===0">Submit</button>
     </form> 
   </section>
@@ -75,7 +79,8 @@
     },
     methods: {
       ...mapActions([
-        'addUser'
+        'addUser',
+        'deleteUser'
       ]),
       resetFields () {
         // clear our inputs by re-merging a fresh copy of our initial component data
