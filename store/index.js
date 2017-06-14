@@ -1,16 +1,25 @@
+// import axios for communicating with our server
+import axios from 'axios'
+import API from './../api'
+
 // outline our actions and mutations
 export const actions = {
-  addUser ({commit}, newUser) {
-    // generate a psuedo-random 'id' for our newUser
-    newUser.id = Math.floor(Math.random() * 1000) + 1
+  async addUser ({commit}, newUser) {
+    // we'll POST our newUser off to our API to be saved permanently
+    const response = await axios.post(`${API.baseURL}/users`, newUser)
     // pass our value args into our addUser 'mutation' method
-    commit('addUser', newUser)
+    commit('addUser', response.data)
   },
-  deleteUser ({commit}, targetUserId) {
-    // TEMP - we'll come back and implement an API dispatch here shortly
+  async deleteUser ({commit}, targetUserId) {
+    // we'll issue a DELETE request to our API to ensure this user is removed permanently
+    await axios.delete(`${API.baseURL}/users/${targetUserId}`)
+    // dispatch
     commit('deleteUser', targetUserId)
   },
-  editUser ({commit}, updatedUserData) {
+  async editUser ({commit}, updatedUserData) {
+    // update document on server
+    await axios.put(`${API.baseURL}/users/${updatedUserData.id}`, updatedUserData)
+    // dispatch
     commit('editUser', updatedUserData)
   }
 }
