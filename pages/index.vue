@@ -1,97 +1,31 @@
 <template>
   <section class="container">
-    <h1>My Team ({{users.length}} total)</h1>
-    <input type="text" v-model="search" placeholder="Filter staff by typing...">
-    <table>
-      <thead>
-        <th>Employee Name</th>
-        <th>Employee Role(s)</th>
-        <th>This user manages:</th>
-        <th>Is this user an admin?</th>
-        <th>Actions</th>      
-      </thead>
-      <tbody>
-        <tr v-for="user in users" v-show="user.firstname.toLowerCase().includes(search.toLowerCase()) || user.lastname.toLowerCase().includes(search.toLowerCase())">
-          <td>{{user.firstname}} {{user.lastname}}</td>
-          <td>
-            <template v-if="user.roleIds && user.roleIds.length > 0">{{user.roleIds | findById(roles)}}</template>
-            <template v-else>This user does not have a role</template>
-          </td>          
-          <td>
-            <template v-if="user.managerOf && user.managerOf.length > 0">{{user.managerOf | findById(users)}}</template>
-            <template v-else>This user does not manage any staff</template>
-          </td>   
-          <td>{{user.permissions.admin ? 'Yes' : 'No'}}</td> 
-          <td>
-            <button role="button" @click="deleteUser(user.id)">Delete <img src="https:icon.now.sh/trash" alt="Delete this user?"></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <h2>Add a new team member</h2>
-    <form @submit.prevent="addUser({firstname, lastname, roleIds, managerOf, permissions: {admin: isAdmin}}); resetFields()">
-      <input type="text" placeholder="Enter their firstname" v-model="firstname" v-bind:class="{invalid: firstname.length===0}">
-      <input type="text" placeholder="Enter their lastname" v-model="lastname" v-bind:class="{invalid: lastname.length===0}">
-      <select name="roles" v-model="roleIds" multiple>
-        <option v-for="role in roles" v-bind:value="role.id">{{role.title}}</option>
-      </select>
-      <select name="managers" v-model="managerOf" multiple>
-        <option v-for="user in users" v-bind:value="user.id">{{user.firstname}} {{user.lastname}}</option>
-      </select>
-      <input id="admin-status" type="checkbox" v-bind:checked="isAdmin" v-model="isAdmin"> <label for="admin-status">Is this user an admin?</label>
-      <button role="button" v-bind:disabled="firstname.length===0 || lastname.length===0">Submit</button>
-    </form> 
+    <UserTable></UserTable>
+    <AddUserForm></AddUserForm>
   </section>
 </template>
-<style scoped>
-  .invalid { border: 2px solid red }
-</style>
 <script>
-  // import required modules
-  import { mapState, mapActions, mapMutations } from 'vuex'
+  // import required modules and components
+  import { mapMutations } from 'vuex'
+
+  import UserTable from '~/components/user-table'
+  import AddUserForm from '~/components/add-user-form'
+
   import { init } from './shared'
 
   export default {
     // bind the 'fetch' lifecycle method to our shared initialisation function
     fetch: init,
-    // create data fields that we can bind values within our template to
-    data () {
-      return {
-        search: '',
-        firstname: '',
-        lastname: '',
-        roleIds: [],
-        managerOf: [],
-        isAdmin: false
-      }
+    // declare components used within this vue
+    components: {
+      UserTable,
+      AddUserForm
     },
-    // define filters to help us
-    filters: {
-      findById: (chosen, all) => all.filter(
-        item => chosen.includes(item.id)
-      ).map(
-        item => item.firstname ? item.firstname + ' ' + item.lastname : item.title
-      ).join(', ')
-    },
-    // spread the necessary props from our vuex state into this component
-    computed: {
-      ...mapState({
-        roles: state => state.roles,
-        users: state => state.users
-      })
-    },
+    // declare the relevant methods for this page
     methods: {
-      ...mapActions([
-        'addUser',
-        'deleteUser'
-      ]),
       ...mapMutations([
         'init'
-      ]),
-      resetFields () {
-        // clear our inputs by re-merging a fresh copy of our initial component data
-        Object.assign(this.$data, this.$options.data())
-      }
+      ])
     }
   }
 </script>
