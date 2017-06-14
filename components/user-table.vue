@@ -26,6 +26,7 @@
 					<td>{{user.permissions.admin ? 'Yes' : 'No'}}</td> 
 					<td>
 					<button role="button" @click="deleteUser(user.id)">Delete <img src="https:icon.now.sh/trash" alt="Delete this user?"></button>
+					<nuxt-link :to="'edit/' + user.id">Edit <img src="https:icon.now.sh/compose" alt="Click to edit this user"></nuxt-link>
 					</td>
 				</tr>
 			</tbody>

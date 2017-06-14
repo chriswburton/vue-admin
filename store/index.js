@@ -9,6 +9,9 @@ export const actions = {
   deleteUser ({commit}, targetUserId) {
     // TEMP - we'll come back and implement an API dispatch here shortly
     commit('deleteUser', targetUserId)
+  },
+  editUser ({commit}, updatedUserData) {
+    commit('editUser', updatedUserData)
   }
 }
 
@@ -22,6 +25,13 @@ export const mutations = {
   },
   deleteUser (state, targetUserId) {
     state.users = state.users.filter(user => user.id !== targetUserId)
+  },
+  editUser (state, updatedUser) {
+    state.users = state.users.map(
+      user => user.id === updatedUser.id
+        ? updatedUser
+        : user
+    )
   }
 }
 
