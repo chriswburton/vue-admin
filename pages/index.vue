@@ -23,7 +23,7 @@
           </td>   
           <td>{{user.permissions.admin ? 'Yes' : 'No'}}</td> 
           <td>
-            <button role="button" @click="deleteUser(user.id)">Delete <img src="https:icon.now.sh/trash" alt="Delete this user?" /></button>
+            <button role="button" @click="deleteUser(user.id)">Delete <img src="https:icon.now.sh/trash" alt="Delete this user?"></button>
           </td>
         </tr>
       </tbody>
@@ -47,10 +47,13 @@
   .invalid { border: 2px solid red }
 </style>
 <script>
-  // get our required helpers from vuex
-  import { mapState, mapActions } from 'vuex'
+  // import required modules
+  import { mapState, mapActions, mapMutations } from 'vuex'
+  import { init } from './shared'
 
   export default {
+    // bind the 'fetch' lifecycle method to our shared initialisation function
+    fetch: init,
     // create data fields that we can bind values within our template to
     data () {
       return {
@@ -81,6 +84,9 @@
       ...mapActions([
         'addUser',
         'deleteUser'
+      ]),
+      ...mapMutations([
+        'init'
       ]),
       resetFields () {
         // clear our inputs by re-merging a fresh copy of our initial component data

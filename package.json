@@ -5,6 +5,7 @@
   "author": "chriswburton <nuclearcornflakes@gmail.com>",
   "private": true,
   "dependencies": {
+    "axios": "^0.16.2",
     "nuxt": "latest"
   },
   "scripts": {
