@@ -1,5 +1,10 @@
 <template>
-  <section class="container">
+  <section class="container mt-4 pt-4">
+    <ul class="nav justify-content-end my-3">
+      <li class="nav-item">
+        <nuxt-link class="nav-link" to="/#new-user">Add New User</nuxt-link>
+      </li>      
+    </ul>
     <UserTable></UserTable>
     <AddUserForm></AddUserForm>
   </section>
